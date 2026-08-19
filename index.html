@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Chasse Pokémon</title>
+
+
+  <style>
+
+    body {
+
+      margin: 0;
+      padding: 20px;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background: #f2f2f2;
+
+      text-align: center;
+    }
+
+
+    .card {
+
+      max-width: 420px;
+
+      margin: 30px auto;
+
+      padding: 30px 20px;
+
+      background: white;
+
+      border-radius: 20px;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0,0,0,0.15);
+    }
+
+
+    h1 {
+
+      font-size: 30px;
+    }
+
+
+    h2 {
+
+      font-size: 24px;
+    }
+
+
+    .pokemon {
+
+      font-size: 32px;
+
+      font-weight: bold;
+
+      margin: 25px 0;
+    }
+
+
+    .nomJoueur {
+
+      font-size: 28px;
+
+      font-weight: bold;
+
+      margin: 20px;
+    }
+
+
+    .progress {
+
+      font-size: 24px;
+
+      font-weight: bold;
+
+      margin: 25px;
+    }
+
+
+    .message {
+
+      font-size: 18px;
+
+      line-height: 1.5;
+    }
+
+
+    input {
+
+      width: 85%;
+
+      box-sizing: border-box;
+
+      padding: 15px;
+
+      font-size: 18px;
+
+      text-align: center;
+
+      border-radius: 10px;
+
+      border: 1px solid #aaa;
+    }
+
+
+    button {
+
+      padding: 15px 25px;
+
+      margin-top: 20px;
+
+      font-size: 18px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      cursor: pointer;
+    }
+
+
+    .liste {
+
+      display: inline-block;
+
+      text-align: left;
+
+      margin-top: 20px;
+
+      min-width: 230px;
+    }
+
+
+    .pokemonLine {
+
+      margin: 10px 0;
+
+      font-size: 17px;
+    }
+
+
+    .small {
+
+      font-size: 14px;
+
+      opacity: 0.65;
+
+      margin-top: 30px;
+    }
+
+
+    .error {
+
+      font-size: 18px;
+
+      line-height: 1.5;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<div
+  class="card"
+  id="app">
+
+  Chargement...
+
+</div>
+
+
+<script>
+
+
+// ======================================================
+// ADRESSE DE TON APPS SCRIPT
+// ======================================================
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbz6Ba7VVACKVBedU_06G_9oP4eTQ4YzQfTTS-JRoXvtbLQ6k71NQSmQ_vRp3yGl083wDg/exec";
+
+
+// ======================================================
+// PARAMÈTRES DE L'URL
+// ======================================================
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const action =
+  params.get("action") || "";
+
+
+const pokemon =
+  params.get("pokemon") || "";
+
+
+// ======================================================
+// PROFIL
+// ======================================================
+
+const STORAGE_KEY =
+  "chasse_pokemon_joueur";
+
+
+let joueur = null;
+
+
+try {
+
+  joueur =
+    localStorage.getItem(
+      STORAGE_KEY
+    );
+
+}
+
+catch (e) {
+
+  joueur = null;
+}
+
+
+// ======================================================
+// DÉMARRAGE
+// ======================================================
+
+window.addEventListener(
+  "load",
+  demarrer
+);
+
+
+function demarrer() {
+
+
+  // --------------------------------------------
+  // INSCRIPTION
+  // --------------------------------------------
+
+  if (action === "inscription") {
+
+    afficherInscription();
+
+    return;
+  }
+
+
+  // --------------------------------------------
+  // CAPTURE
+  // --------------------------------------------
+
+  if (pokemon) {
+
+
+    if (!joueur) {
+
+      afficherProfilAbsent();
+
+      return;
+    }
+
+
+    capturer();
+
+    return;
+  }
+
+
+  // --------------------------------------------
+  // PAGE NORMALE
+  // --------------------------------------------
+
+  if (joueur) {
+
+    afficherAccueil();
+
+  }
+
+  else {
+
+    afficherInscription();
+  }
+
+}
+
+
+// ======================================================
+// INSCRIPTION
+// ======================================================
+
+function afficherInscription() {
+
+
+  if (joueur) {
+
+    document.getElementById("app")
+      .innerHTML = `
+
+        <h1>
+          ✅ Dresseur enregistré
+        </h1>
+
+        <p class="message">
+          Ce téléphone est associé à :
+        </p>
+
+        <div class="nomJoueur">
+          ${escapeHtml(joueur)}
+        </div>
+
+        <p class="message">
+          Ton téléphone est prêt pour la chasse !
+        </p>
+
+        <button onclick="afficherAccueil()">
+          Voir mon Pokédex
+        </button>
+
+        <div class="small">
+
+          <button onclick="changerJoueur()">
+            Changer de joueur
+          </button>
+
+        </div>
+      `;
+
+
+    return;
+  }
+
+
+  document.getElementById("app")
+    .innerHTML = `
+
+      <h1>
+        🎒 Inscription
+      </h1>
+
+      <p class="message">
+        Entre ton prénom avant le départ de la chasse.
+      </p>
+
+      <input
+        id="nom"
+        type="text"
+        placeholder="Ton prénom"
+        autocomplete="off"
+        maxlength="30"
+      >
+
+      <br>
+
+      <button onclick="validerInscription()">
+        Je suis prêt !
+      </button>
+    `;
+
+
+  const champ =
+    document.getElementById("nom");
+
+
+  champ.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        validerInscription();
+      }
+    }
+  );
+
+
+  champ.focus();
+}
+
+
+// ======================================================
+// VALIDATION
+// ======================================================
+
+function validerInscription() {
+
+
+  const nom =
+    document
+      .getElementById("nom")
+      .value
+      .trim();
+
+
+  if (!nom) {
+
+    alert(
+      "Entre ton prénom !"
+    );
+
+    return;
+  }
+
+
+  joueur = nom;
+
+
+  try {
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      joueur
+    );
+
+  }
+
+  catch (e) {
+
+    afficherErreur(
+      "Ton navigateur empêche l'enregistrement du profil."
+    );
+
+    return;
+  }
+
+
+  document.getElementById("app")
+    .innerHTML = `
+
+      <h1>
+        🎉 Inscription terminée !
+      </h1>
+
+      <p>
+        Bienvenue
+      </p>
+
+      <div class="nomJoueur">
+        ${escapeHtml(joueur)}
+      </div>
+
+      <p class="message">
+        Ton téléphone est maintenant prêt.
+      </p>
+
+      <p class="message">
+        🏁 Attends le départ de la chasse !
+      </p>
+    `;
+}
+
+
+// ======================================================
+// CAPTURE
+// ======================================================
+
+function capturer() {
+
+
+  document.getElementById("app")
+    .innerHTML = `
+
+      <h1>
+        🔎 Capture en cours...
+      </h1>
+
+      <div class="pokemon">
+        ${escapeHtml(pokemon)}
+      </div>
+    `;
+
+
+  appelerAPI(
+    {
+      action: "capture",
+      joueur: joueur,
+      pokemon: pokemon
+    },
+    afficherResultat
+  );
+}
+
+
+// ======================================================
+// RÉSULTAT
+// ======================================================
+
+function afficherResultat(resultat) {
+
+
+  if (!resultat.success) {
+
+    afficherErreur(
+      resultat.message
+    );
+
+    return;
+  }
+
+
+  const titre =
+    resultat.dejaCapture
+      ? "😏 Déjà capturé !"
+      : "🎉 Capture réussie !";
+
+
+  afficherPokedex(
+    resultat,
+    titre,
+    resultat.pokemon
+  );
+}
+
+
+// ======================================================
+// ACCUEIL / POKEDEX
+// ======================================================
+
+function afficherAccueil() {
+
+
+  document.getElementById("app")
+    .innerHTML = `
+
+      <h1>
+        📖 Chargement du Pokédex...
+      </h1>
+    `;
+
+
+  appelerAPI(
+    {
+      action: "status",
+      joueur: joueur
+    },
+
+    function(resultat) {
+
+      if (!resultat.success) {
+
+        afficherErreur(
+          resultat.message
+        );
+
+        return;
+      }
+
+
+      afficherPokedex(
+        resultat,
+        "🎒 Mon Pokédex",
+        ""
+      );
+    }
+  );
+}
+
+
+// ======================================================
+// AFFICHAGE POKEDEX
+// ======================================================
+
+function afficherPokedex(
+  resultat,
+  titre,
+  pokemonCapture
+) {
+
+
+  let liste = "";
+
+
+  resultat.pokemons.forEach(
+    function(p) {
+
+
+      const capture =
+        resultat.captures.includes(p);
+
+
+      liste += `
+
+        <div class="pokemonLine">
+
+          ${capture ? "✅" : "❓"}
+
+          ${
+            capture
+              ? escapeHtml(p)
+              : "??????"
+          }
+
+        </div>
+      `;
+    }
+  );
+
+
+  let pokemonHTML = "";
+
+
+  if (pokemonCapture) {
+
+    pokemonHTML = `
+
+      <div class="pokemon">
+
+        ${escapeHtml(pokemonCapture)}
+
+      </div>
+    `;
+  }
+
+
+  let victoire = "";
+
+
+  if (
+    resultat.nombre ===
+    resultat.total
+  ) {
+
+    victoire = `
+
+      <h2>
+        🏆 Pokédex complet !
+      </h2>
+
+      <p class="message">
+        Tu as capturé tous les Pokémon !
+      </p>
+    `;
+  }
+
+
+  document.getElementById("app")
+    .innerHTML = `
+
+      <h1>
+        ${titre}
+      </h1>
+
+      ${pokemonHTML}
+
+      <p>
+        Dresseur :
+        <b>${escapeHtml(joueur)}</b>
+      </p>
+
+      <div class="progress">
+
+        Pokédex :
+
+        ${resultat.nombre}
+        /
+        ${resultat.total}
+
+      </div>
+
+      ${victoire}
+
+      <div class="liste">
+        ${liste}
+      </div>
+
+      <div class="small">
+
+        <button onclick="changerJoueur()">
+          Changer de joueur
+        </button>
+
+      </div>
+    `;
+}
+
+
+// ======================================================
+// PROFIL ABSENT
+// ======================================================
+
+function afficherProfilAbsent() {
+
+
+  document.getElementById("app")
+    .innerHTML = `
+
+      <h1>
+        ⛔ Dresseur non enregistré
+      </h1>
+
+      <p class="message">
+
+        Ce téléphone n'a pas encore
+        de profil pour la chasse.
+
+      </p>
+
+      <button onclick="allerInscription()">
+
+        M'inscrire
+
+      </button>
+    `;
+}
+
+
+function allerInscription() {
+
+  window.location.href =
+    "./?action=inscription";
+}
+
+
+// ======================================================
+// CHANGER JOUEUR
+// ======================================================
+
+function changerJoueur() {
+
+
+  const ok =
+    confirm(
+      "Changer de joueur sur ce téléphone ?"
+    );
+
+
+  if (!ok) {
+
+    return;
+  }
+
+
+  try {
+
+    localStorage.removeItem(
+      STORAGE_KEY
+    );
+
+  }
+
+  catch (e) {}
+
+
+  joueur = null;
+
+
+  window.location.href =
+    "./?action=inscription";
+}
+
+
+// ======================================================
+// APPEL APPS SCRIPT EN JSONP
+// ======================================================
+
+function appelerAPI(
+  donnees,
+  fonctionRetour
+) {
+
+
+  const callbackName =
+    "jsonp_" +
+    Date.now() +
+    "_" +
+    Math.floor(
+      Math.random() * 100000
+    );
+
+
+  window[callbackName] =
+    function(resultat) {
+
+
+      try {
+
+        fonctionRetour(resultat);
+
+      }
+
+      finally {
+
+        delete window[callbackName];
+
+        script.remove();
+      }
+    };
+
+
+  donnees.callback =
+    callbackName;
+
+
+  const query =
+    new URLSearchParams(
+      donnees
+    );
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.src =
+    API_URL +
+    "?" +
+    query.toString();
+
+
+  script.onerror =
+    function() {
+
+      delete window[callbackName];
+
+      script.remove();
+
+
+      afficherErreur(
+        "Impossible de contacter le serveur. Vérifie ta connexion Internet puis rescanne le QR."
+      );
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+}
+
+
+// ======================================================
+// ERREURS
+// ======================================================
+
+function afficherErreur(message) {
+
+
+  document.getElementById("app")
+    .innerHTML = `
+
+      <h1>
+        ❌ Erreur
+      </h1>
+
+      <p class="error">
+
+        ${escapeHtml(message)}
+
+      </p>
+    `;
+}
+
+
+// ======================================================
+// SÉCURITÉ HTML
+// ======================================================
+
+function escapeHtml(texte) {
+
+
+  return String(texte)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+}
+
+
+</script>
+
+</body>
+
+</html>
