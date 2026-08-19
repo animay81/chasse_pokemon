@@ -171,6 +171,14 @@
       line-height: 1.5;
     }
 
+    .pokemonImage {
+      width: 190px;
+      height: 190px;
+      object-fit: contain;
+      margin: 5px auto 15px auto;
+      display: block;
+    }
+
   </style>
 
 </head>
@@ -215,6 +223,22 @@ const action =
 
 const pokemon =
   params.get("pokemon") || "";
+
+  // IMAGES
+
+  const IMAGES = {
+  "Marikachu": "images/marikachu.png",
+  "Salamichelet": "images/salamichelet.png",
+  "Rondoudournemiche": "images/rondoudournemiche.png",
+  "Rattatalexia": "images/rattatalexia.png",
+  "Thomackogneur": "images/thomackogneur.png",
+  "Tenthomacool": "images/tenthomacool.png",
+  "Pagicarpe": "images/pagicarpe.png",
+  "Remiaouss": "images/remiaouss.png",
+  "Ronflalexane": "images/ronflalexane.png",
+  "Eleaquali": "images/eleaquali.png",
+  "Gillelektek": "images/gillelektek.png"
+};
 
 
 // ======================================================
@@ -623,15 +647,26 @@ function afficherPokedex(
 
   if (pokemonCapture) {
 
-    pokemonHTML = `
+  const image =
+    IMAGES[pokemonCapture] || "";
 
-      <div class="pokemon">
+  pokemonHTML = `
 
-        ${escapeHtml(pokemonCapture)}
+    ${
+      image
+        ? `<img
+             class="pokemonImage"
+             src="${image}"
+             alt="${escapeHtml(pokemonCapture)}"
+           >`
+        : ""
+    }
 
-      </div>
-    `;
-  }
+    <div class="pokemon">
+      ${escapeHtml(pokemonCapture)}
+    </div>
+  `;
+}
 
 
   let victoire = "";
