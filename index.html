@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -13,12 +11,15 @@
 
   <title>Chasse Pokémon</title>
 
-
   <style>
 
-    body {
+    * {
+      box-sizing: border-box;
+    }
 
+    body {
       margin: 0;
+      min-height: 100vh;
       padding: 20px;
 
       font-family:
@@ -26,85 +27,120 @@
         Helvetica,
         sans-serif;
 
-      background: #f2f2f2;
+      background:
+        linear-gradient(
+          160deg,
+          #8f1111,
+          #d62828 55%,
+          #8f1111
+        );
 
       text-align: center;
+
+      color: #222;
+    }
+
+
+    .appShell {
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+
+    .topBar {
+      background: #231f20;
+      color: white;
+
+      border-radius: 16px;
+
+      padding: 12px 16px;
+
+      margin-bottom: 14px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      font-size: 15px;
+
+      box-shadow:
+        0 4px 12px
+        rgba(0,0,0,0.25);
+    }
+
+
+    .topBar strong {
+      font-size: 16px;
     }
 
 
     .card {
+      background: #fff;
 
-      max-width: 420px;
+      border-radius: 24px;
 
-      margin: 30px auto;
-
-      padding: 30px 20px;
-
-      background: white;
-
-      border-radius: 20px;
+      padding: 28px 20px;
 
       box-shadow:
-        0 4px 15px
-        rgba(0,0,0,0.15);
+        0 8px 24px
+        rgba(0,0,0,0.28);
+
+      border:
+        4px solid #231f20;
     }
 
 
     h1 {
+      margin-top: 0;
+      margin-bottom: 18px;
 
       font-size: 30px;
     }
 
 
     h2 {
-
       font-size: 24px;
-    }
-
-
-    .pokemon {
-
-      font-size: 32px;
-
-      font-weight: bold;
-
-      margin: 25px 0;
-    }
-
-
-    .nomJoueur {
-
-      font-size: 28px;
-
-      font-weight: bold;
-
-      margin: 20px;
-    }
-
-
-    .progress {
-
-      font-size: 24px;
-
-      font-weight: bold;
-
-      margin: 25px;
     }
 
 
     .message {
-
       font-size: 18px;
-
       line-height: 1.5;
     }
 
 
+    .pokemon {
+      font-size: 31px;
+      font-weight: bold;
+
+      margin: 18px 0;
+    }
+
+
+    .pokemonImage {
+      width: 200px;
+      height: 200px;
+
+      object-fit: contain;
+
+      display: block;
+
+      margin:
+        8px auto
+        12px auto;
+    }
+
+
+    .nomJoueur {
+      font-size: 28px;
+      font-weight: bold;
+
+      margin: 18px 0;
+    }
+
+
     input {
-
       width: 85%;
-
-      box-sizing: border-box;
 
       padding: 15px;
 
@@ -112,71 +148,379 @@
 
       text-align: center;
 
-      border-radius: 10px;
+      border-radius: 12px;
 
-      border: 1px solid #aaa;
+      border:
+        2px solid #aaa;
+
+      outline: none;
+    }
+
+
+    input:focus {
+      border-color: #d62828;
     }
 
 
     button {
-
-      padding: 15px 25px;
-
       margin-top: 20px;
 
-      font-size: 18px;
+      padding:
+        14px 24px;
+
+      font-size: 17px;
+      font-weight: bold;
 
       border: none;
 
       border-radius: 12px;
 
       cursor: pointer;
+
+      background: #f4c430;
+      color: #231f20;
+
+      box-shadow:
+        0 4px 0 #ba8f00;
+    }
+
+
+    button:active {
+      transform:
+        translateY(2px);
+
+      box-shadow:
+        0 2px 0 #ba8f00;
+    }
+
+
+    .secondaryButton {
+      background: transparent;
+      color: #555;
+
+      box-shadow: none;
+
+      padding: 8px 12px;
+
+      font-size: 13px;
+
+      text-decoration: underline;
+    }
+
+
+    .progressBlock {
+      margin:
+        22px 0
+        26px 0;
+    }
+
+
+    .progressHeader {
+      display: flex;
+      justify-content: space-between;
+
+      font-weight: bold;
+
+      margin-bottom: 8px;
+    }
+
+
+    .progressTrack {
+      width: 100%;
+      height: 18px;
+
+      background: #ddd;
+
+      border-radius: 99px;
+
+      overflow: hidden;
+
+      border:
+        2px solid #231f20;
+    }
+
+
+    .progressFill {
+      height: 100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          #f4c430,
+          #ffdf59
+        );
+
+      width: 0%;
+
+      transition:
+        width 0.65s ease;
     }
 
 
     .liste {
+      text-align: left;
 
       display: inline-block;
 
-      text-align: left;
-
-      margin-top: 20px;
-
       min-width: 230px;
+
+      margin-top: 12px;
     }
 
 
     .pokemonLine {
-
-      margin: 10px 0;
+      margin:
+        10px 0;
 
       font-size: 17px;
     }
 
 
     .small {
+      font-size: 13px;
 
-      font-size: 14px;
+      opacity: 0.7;
 
-      opacity: 0.65;
-
-      margin-top: 30px;
+      margin-top: 28px;
     }
 
 
-    .error {
-
-      font-size: 18px;
-
-      line-height: 1.5;
+    .loaderWrap {
+      padding:
+        18px 0
+        10px 0;
     }
 
-    .pokemonImage {
-      width: 190px;
-      height: 190px;
+
+    .wildText {
+      font-size: 22px;
+      font-weight: bold;
+
+      margin-bottom: 20px;
+    }
+
+
+    .pokeball {
+      width: 86px;
+      height: 86px;
+
+      margin:
+        14px auto
+        20px auto;
+
+      border-radius: 50%;
+
+      position: relative;
+
+      overflow: hidden;
+
+      border:
+        5px solid #231f20;
+
+      background:
+        linear-gradient(
+          to bottom,
+          #e53935 0%,
+          #e53935 47%,
+          #231f20 47%,
+          #231f20 53%,
+          #f5f5f5 53%,
+          #f5f5f5 100%
+        );
+
+      animation:
+        shake 0.9s infinite;
+    }
+
+
+    .pokeball::after {
+      content: "";
+
+      position: absolute;
+
+      width: 26px;
+      height: 26px;
+
+      border-radius: 50%;
+
+      background: white;
+
+      border:
+        5px solid #231f20;
+
+      left: 50%;
+      top: 50%;
+
+      transform:
+        translate(-50%, -50%);
+    }
+
+
+    .dots {
+      font-size: 22px;
+      letter-spacing: 6px;
+
+      animation:
+        pulse 1s infinite;
+    }
+
+
+    .captureSuccess {
+      animation:
+        popIn 0.55s ease;
+    }
+
+
+    .duplicate {
+      font-size: 22px;
+      font-weight: bold;
+
+      margin:
+        10px 0
+        20px 0;
+    }
+
+
+    .victoryImage {
+      width: 100%;
+      max-width: 330px;
+
+      height: auto;
+
       object-fit: contain;
-      margin: 5px auto 15px auto;
+
+      margin:
+        10px auto
+        22px auto;
+
       display: block;
+
+      animation:
+        victoryPop 0.8s ease;
+    }
+
+
+    .victoryTitle {
+      font-size: 34px;
+
+      margin-bottom: 12px;
+
+      animation:
+        pulse 1.2s infinite;
+    }
+
+
+    @keyframes shake {
+
+      0% {
+        transform:
+          rotate(0deg);
+      }
+
+      25% {
+        transform:
+          rotate(-8deg);
+      }
+
+      50% {
+        transform:
+          rotate(8deg);
+      }
+
+      75% {
+        transform:
+          rotate(-5deg);
+      }
+
+      100% {
+        transform:
+          rotate(0deg);
+      }
+    }
+
+
+    @keyframes pulse {
+
+      0% {
+        opacity: 0.35;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.35;
+      }
+    }
+
+
+    @keyframes popIn {
+
+      0% {
+        transform:
+          scale(0.78);
+
+        opacity: 0;
+      }
+
+      75% {
+        transform:
+          scale(1.05);
+
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          scale(1);
+      }
+    }
+
+
+    @keyframes victoryPop {
+
+      0% {
+        transform:
+          scale(0.65);
+
+        opacity: 0;
+      }
+
+      70% {
+        transform:
+          scale(1.06);
+
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          scale(1);
+      }
+    }
+
+
+    @media
+    (max-width: 480px) {
+
+      body {
+        padding: 12px;
+      }
+
+      .card {
+        padding:
+          24px 16px;
+      }
+
+      .pokemonImage {
+        width: 180px;
+        height: 180px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
     }
 
   </style>
@@ -186,12 +530,34 @@
 
 <body>
 
+<div class="appShell">
 
-<div
-  class="card"
-  id="app">
+  <div
+    class="topBar"
+    id="topBar"
+    style="display:none;"
+  >
 
-  Chargement...
+    <div>
+      🎒
+      <strong id="topJoueur"></strong>
+    </div>
+
+    <div id="topProgress">
+      0 / 11
+    </div>
+
+  </div>
+
+
+  <div
+    class="card"
+    id="app"
+  >
+
+    Chargement...
+
+  </div>
 
 </div>
 
@@ -200,11 +566,57 @@
 
 
 // ======================================================
-// ADRESSE DE TON APPS SCRIPT
+// ADRESSE APPS SCRIPT
 // ======================================================
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbzluIXDq8B0Ak1427dnWpAAv0XJvW7HJqyd7wMWWOKaglqD4XHa31pb_nwKFbqaRp7Xgw/exec";
+  "https://script.google.com/macros/s/AKfycbz6Ba7VVACKVBedU_06G_9oP4eTQ4YzQfTTS-JRoXvtbLQ6k71NQSmQ_vRp3yGl083wDg/exec";
+
+
+// ======================================================
+// IMAGES
+// ======================================================
+
+const IMAGES = {
+
+  "Thomackogneur":
+    "images/thomackogneur.png",
+
+  "Ronflalexane":
+    "images/ronflalexane.png",
+
+  "Pagicarpe":
+    "images/pagicarpe.png",
+
+  "Remiaouss":
+    "images/remiaouss.png",
+
+  "Rattatalexia":
+    "images/rattatalexia.png",
+
+  "Marikachu":
+    "images/marikachu.png",
+
+  "Salamichelet":
+    "images/salamichelet.png",
+
+  "Tenthomacool":
+    "images/tenthomacool.png",
+
+  "Gillelektek":
+    "images/gillelektek.png",
+
+  "Eleaquali":
+    "images/eleaquali.png",
+
+  "Rondoudournemiche":
+    "images/rondoudournemiche.png"
+
+};
+
+
+const VICTOIRE_IMAGE =
+  "images/victoire.png";
 
 
 // ======================================================
@@ -224,25 +636,9 @@ const action =
 const pokemon =
   params.get("pokemon") || "";
 
-  // IMAGES
-
-  const IMAGES = {
-  "Marikachu": "images/marikachu.PNG",
-  "Salamichelet": "images/salamichelet.PNG",
-  "Rondoudournemiche": "images/rondoudournemiche.PNG",
-  "Rattatalexia": "images/rattatalexia.PNG",
-  "Thomackogneur": "images/thomackogneur.PNG",
-  "Tenthomacool": "images/tenthomacool.PNG",
-  "Pagicarpe": "images/pagicarpe.PNG",
-  "Remiaouss": "images/remiaouss.PNG",
-  "Ronflalexane": "images/ronflalexane.PNG",
-  "Eleaquali": "images/eleaquali.PNG",
-  "Gillelektek": "images/gillelektek.PNG"
-};
-
 
 // ======================================================
-// PROFIL
+// PROFIL LOCAL
 // ======================================================
 
 const STORAGE_KEY =
@@ -280,10 +676,6 @@ window.addEventListener(
 function demarrer() {
 
 
-  // --------------------------------------------
-  // INSCRIPTION
-  // --------------------------------------------
-
   if (action === "inscription") {
 
     afficherInscription();
@@ -291,10 +683,6 @@ function demarrer() {
     return;
   }
 
-
-  // --------------------------------------------
-  // CAPTURE
-  // --------------------------------------------
 
   if (pokemon) {
 
@@ -307,15 +695,17 @@ function demarrer() {
     }
 
 
+    afficherTopBar(
+      joueur,
+      null
+    );
+
+
     capturer();
 
     return;
   }
 
-
-  // --------------------------------------------
-  // PAGE NORMALE
-  // --------------------------------------------
 
   if (joueur) {
 
@@ -332,44 +722,115 @@ function demarrer() {
 
 
 // ======================================================
+// TOP BAR
+// ======================================================
+
+function afficherTopBar(
+  nom,
+  nombre
+) {
+
+
+  const barre =
+    document.getElementById(
+      "topBar"
+    );
+
+
+  barre.style.display =
+    "flex";
+
+
+  document
+    .getElementById(
+      "topJoueur"
+    )
+    .textContent =
+      nom || "";
+
+
+  if (nombre !== null) {
+
+    document
+      .getElementById(
+        "topProgress"
+      )
+      .textContent =
+        nombre + " / 11";
+  }
+
+}
+
+
+// ======================================================
 // INSCRIPTION
 // ======================================================
 
 function afficherInscription() {
 
 
+  document
+    .getElementById(
+      "topBar"
+    )
+    .style.display =
+      "none";
+
+
   if (joueur) {
 
-    document.getElementById("app")
+
+    document
+      .getElementById("app")
       .innerHTML = `
 
         <h1>
           ✅ Dresseur enregistré
         </h1>
 
+
         <p class="message">
+
           Ce téléphone est associé à :
+
         </p>
+
 
         <div class="nomJoueur">
+
           ${escapeHtml(joueur)}
+
         </div>
 
+
         <p class="message">
-          Ton téléphone est prêt pour la chasse !
+
+          Ton téléphone est prêt
+          pour la chasse !
+
         </p>
 
-        <button onclick="afficherAccueil()">
+
+        <button
+          onclick="afficherAccueil()">
+
           Voir mon Pokédex
+
         </button>
+
 
         <div class="small">
 
-          <button onclick="changerJoueur()">
+          <button
+            class="secondaryButton"
+            onclick="changerJoueur()">
+
             Changer de joueur
+
           </button>
 
         </div>
+
       `;
 
 
@@ -377,16 +838,22 @@ function afficherInscription() {
   }
 
 
-  document.getElementById("app")
+  document
+    .getElementById("app")
     .innerHTML = `
 
       <h1>
         🎒 Inscription
       </h1>
 
+
       <p class="message">
-        Entre ton prénom avant le départ de la chasse.
+
+        Entre ton prénom
+        avant le départ de la chasse.
+
       </p>
+
 
       <input
         id="nom"
@@ -396,23 +863,35 @@ function afficherInscription() {
         maxlength="30"
       >
 
+
       <br>
 
-      <button onclick="validerInscription()">
+
+      <button
+        onclick="validerInscription()">
+
         Je suis prêt !
+
       </button>
+
     `;
 
 
   const champ =
-    document.getElementById("nom");
+    document.getElementById(
+      "nom"
+    );
 
 
   champ.addEventListener(
+
     "keydown",
+
     function(event) {
 
-      if (event.key === "Enter") {
+      if (
+        event.key === "Enter"
+      ) {
 
         validerInscription();
       }
@@ -425,7 +904,7 @@ function afficherInscription() {
 
 
 // ======================================================
-// VALIDATION
+// VALIDATION INSCRIPTION
 // ======================================================
 
 function validerInscription() {
@@ -470,28 +949,41 @@ function validerInscription() {
   }
 
 
-  document.getElementById("app")
+  document
+    .getElementById("app")
     .innerHTML = `
 
       <h1>
         🎉 Inscription terminée !
       </h1>
 
+
       <p>
         Bienvenue
       </p>
 
+
       <div class="nomJoueur">
+
         ${escapeHtml(joueur)}
+
       </div>
 
-      <p class="message">
-        Ton téléphone est maintenant prêt.
-      </p>
 
       <p class="message">
-        🏁 Attends le départ de la chasse !
+
+        Ton téléphone est maintenant prêt.
+
       </p>
+
+
+      <p class="message">
+
+        🏁 Attends le départ
+        de la chasse !
+
+      </p>
+
     `;
 }
 
@@ -503,35 +995,65 @@ function validerInscription() {
 function capturer() {
 
 
-  document.getElementById("app")
+  const image =
+    IMAGES[pokemon] || "";
+
+
+  document
+    .getElementById("app")
     .innerHTML = `
 
-      <h1>
-        🔎 Capture en cours...
-      </h1>
+      <div class="loaderWrap">
 
-      <div class="pokemon">
-        ${escapeHtml(pokemon)}
+        <div class="wildText">
+
+          Un Pokémon sauvage apparaît...
+
+        </div>
+
+
+        <div class="pokeball"></div>
+
+
+        <div class="pokemon">
+
+          ${escapeHtml(pokemon)}
+
+        </div>
+
+
+        <div class="dots">
+
+          •••
+
+        </div>
+
       </div>
+
     `;
 
 
   appelerAPI(
+
     {
       action: "capture",
       joueur: joueur,
       pokemon: pokemon
     },
+
     afficherResultat
+
   );
 }
 
 
 // ======================================================
-// RÉSULTAT
+// RÉSULTAT CAPTURE
 // ======================================================
 
-function afficherResultat(resultat) {
+function afficherResultat(
+  resultat
+) {
 
 
   if (!resultat.success) {
@@ -544,17 +1066,230 @@ function afficherResultat(resultat) {
   }
 
 
-  const titre =
-    resultat.dejaCapture
-      ? "😏 Déjà capturé !"
-      : "🎉 Capture réussie !";
-
-
-  afficherPokedex(
-    resultat,
-    titre,
-    resultat.pokemon
+  afficherTopBar(
+    joueur,
+    resultat.nombre
   );
+
+
+  if (
+    resultat.nombre ===
+    resultat.total
+  ) {
+
+    afficherVictoire(
+      resultat
+    );
+
+    return;
+  }
+
+
+  if (
+    resultat.dejaCapture
+  ) {
+
+    afficherDoublon(
+      resultat
+    );
+
+    return;
+  }
+
+
+  afficherCaptureReussie(
+    resultat
+  );
+}
+
+
+// ======================================================
+// CAPTURE RÉUSSIE
+// ======================================================
+
+function afficherCaptureReussie(
+  resultat
+) {
+
+
+  const image =
+    IMAGES[resultat.pokemon] || "";
+
+
+  document
+    .getElementById("app")
+    .innerHTML = `
+
+      <div class="captureSuccess">
+
+        <h1>
+          ✨ CAPTURÉ ! ✨
+        </h1>
+
+
+        ${
+          image
+            ? `
+              <img
+                class="pokemonImage"
+                src="${image}"
+                alt="${escapeHtml(
+                  resultat.pokemon
+                )}"
+              >
+            `
+            : ""
+        }
+
+
+        <div class="pokemon">
+
+          ${escapeHtml(
+            resultat.pokemon
+          )}
+
+        </div>
+
+
+        ${genererProgression(
+          resultat.nombre,
+          resultat.total
+        )}
+
+
+        ${genererListe(
+          resultat
+        )}
+
+
+        ${genererBoutonJoueur()}
+
+      </div>
+
+    `;
+}
+
+
+// ======================================================
+// DOUBLON
+// ======================================================
+
+function afficherDoublon(
+  resultat
+) {
+
+
+  const image =
+    IMAGES[resultat.pokemon] || "";
+
+
+  document
+    .getElementById("app")
+    .innerHTML = `
+
+      <h1>
+        👀 Déjà capturé !
+      </h1>
+
+
+      ${
+        image
+          ? `
+            <img
+              class="pokemonImage"
+              src="${image}"
+              alt="${escapeHtml(
+                resultat.pokemon
+              )}"
+            >
+          `
+          : ""
+      }
+
+
+      <div class="pokemon">
+
+        ${escapeHtml(
+          resultat.pokemon
+        )}
+
+      </div>
+
+
+      <div class="duplicate">
+
+        Cette capture ne compte pas.
+
+      </div>
+
+
+      ${genererProgression(
+        resultat.nombre,
+        resultat.total
+      )}
+
+
+      ${genererListe(
+        resultat
+      )}
+
+
+      ${genererBoutonJoueur()}
+
+    `;
+}
+
+
+// ======================================================
+// VICTOIRE
+// ======================================================
+
+function afficherVictoire(
+  resultat
+) {
+
+
+  document
+    .getElementById("app")
+    .innerHTML = `
+
+      <h1 class="victoryTitle">
+
+        🏆 POKÉDEX COMPLET ! 🏆
+
+      </h1>
+
+
+      <img
+        class="victoryImage"
+        src="${VICTOIRE_IMAGE}"
+        alt="Victoire"
+      >
+
+
+      <div class="progress">
+
+        11 / 11
+
+      </div>
+
+
+      <p class="message">
+
+        Tu as capturé tous les Pokémon !
+
+      </p>
+
+
+      ${genererProgression(
+        resultat.nombre,
+        resultat.total
+      )}
+
+
+      ${genererBoutonJoueur()}
+
+    `;
 }
 
 
@@ -565,22 +1300,32 @@ function afficherResultat(resultat) {
 function afficherAccueil() {
 
 
-  document.getElementById("app")
+  afficherTopBar(
+    joueur,
+    null
+  );
+
+
+  document
+    .getElementById("app")
     .innerHTML = `
 
       <h1>
         📖 Chargement du Pokédex...
       </h1>
+
     `;
 
 
   appelerAPI(
+
     {
       action: "status",
       joueur: joueur
     },
 
     function(resultat) {
+
 
       if (!resultat.success) {
 
@@ -592,24 +1337,113 @@ function afficherAccueil() {
       }
 
 
-      afficherPokedex(
-        resultat,
-        "🎒 Mon Pokédex",
-        ""
+      afficherTopBar(
+        joueur,
+        resultat.nombre
       );
+
+
+      if (
+        resultat.nombre ===
+        resultat.total
+      ) {
+
+        afficherVictoire(
+          resultat
+        );
+
+        return;
+      }
+
+
+      document
+        .getElementById("app")
+        .innerHTML = `
+
+          <h1>
+            🎒 Mon Pokédex
+          </h1>
+
+
+          ${genererProgression(
+            resultat.nombre,
+            resultat.total
+          )}
+
+
+          ${genererListe(
+            resultat
+          )}
+
+
+          ${genererBoutonJoueur()}
+
+        `;
+
     }
+
   );
 }
 
 
 // ======================================================
-// AFFICHAGE POKEDEX
+// BARRE DE PROGRESSION
 // ======================================================
 
-function afficherPokedex(
-  resultat,
-  titre,
-  pokemonCapture
+function genererProgression(
+  nombre,
+  total
+) {
+
+
+  const pourcentage =
+    Math.round(
+      (nombre / total) * 100
+    );
+
+
+  return `
+
+    <div class="progressBlock">
+
+
+      <div class="progressHeader">
+
+        <span>
+          Pokédex
+        </span>
+
+        <span>
+          ${nombre} / ${total}
+        </span>
+
+      </div>
+
+
+      <div class="progressTrack">
+
+        <div
+          class="progressFill"
+          style="
+            width:${pourcentage}%;
+          "
+        >
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+// ======================================================
+// LISTE DU POKEDEX
+// ======================================================
+
+function genererListe(
+  resultat
 ) {
 
 
@@ -617,18 +1451,25 @@ function afficherPokedex(
 
 
   resultat.pokemons.forEach(
+
     function(p) {
 
 
       const capture =
-        resultat.captures.includes(p);
+        resultat.captures.includes(
+          p
+        );
 
 
       liste += `
 
         <div class="pokemonLine">
 
-          ${capture ? "✅" : "❓"}
+          ${
+            capture
+              ? "✅"
+              : "❓"
+          }
 
           ${
             capture
@@ -637,97 +1478,48 @@ function afficherPokedex(
           }
 
         </div>
+
       `;
+
     }
+
   );
 
 
-  let pokemonHTML = "";
+  return `
 
+    <div class="liste">
 
-  if (pokemonCapture) {
+      ${liste}
 
-  const image =
-    IMAGES[pokemonCapture] || "";
-
-  pokemonHTML = `
-
-    ${
-      image
-        ? `<img
-             class="pokemonImage"
-             src="${image}"
-             alt="${escapeHtml(pokemonCapture)}"
-           >`
-        : ""
-    }
-
-    <div class="pokemon">
-      ${escapeHtml(pokemonCapture)}
     </div>
+
   `;
 }
 
 
-  let victoire = "";
+// ======================================================
+// BOUTON CHANGER JOUEUR
+// ======================================================
+
+function genererBoutonJoueur() {
 
 
-  if (
-    resultat.nombre ===
-    resultat.total
-  ) {
+  return `
 
-    victoire = `
+    <div class="small">
 
-      <h2>
-        🏆 Pokédex complet !
-      </h2>
+      <button
+        class="secondaryButton"
+        onclick="changerJoueur()">
 
-      <p class="message">
-        Tu as capturé tous les Pokémon !
-      </p>
-    `;
-  }
+        Changer de joueur
 
+      </button>
 
-  document.getElementById("app")
-    .innerHTML = `
+    </div>
 
-      <h1>
-        ${titre}
-      </h1>
-
-      ${pokemonHTML}
-
-      <p>
-        Dresseur :
-        <b>${escapeHtml(joueur)}</b>
-      </p>
-
-      <div class="progress">
-
-        Pokédex :
-
-        ${resultat.nombre}
-        /
-        ${resultat.total}
-
-      </div>
-
-      ${victoire}
-
-      <div class="liste">
-        ${liste}
-      </div>
-
-      <div class="small">
-
-        <button onclick="changerJoueur()">
-          Changer de joueur
-        </button>
-
-      </div>
-    `;
+  `;
 }
 
 
@@ -738,12 +1530,22 @@ function afficherPokedex(
 function afficherProfilAbsent() {
 
 
-  document.getElementById("app")
+  document
+    .getElementById(
+      "topBar"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById("app")
     .innerHTML = `
 
       <h1>
         ⛔ Dresseur non enregistré
       </h1>
+
 
       <p class="message">
 
@@ -752,16 +1554,20 @@ function afficherProfilAbsent() {
 
       </p>
 
-      <button onclick="allerInscription()">
+
+      <button
+        onclick="allerInscription()">
 
         M'inscrire
 
       </button>
+
     `;
 }
 
 
 function allerInscription() {
+
 
   window.location.href =
     "./?action=inscription";
@@ -807,7 +1613,7 @@ function changerJoueur() {
 
 
 // ======================================================
-// APPEL APPS SCRIPT EN JSONP
+// APPEL API JSONP
 // ======================================================
 
 function appelerAPI(
@@ -831,13 +1637,18 @@ function appelerAPI(
 
       try {
 
-        fonctionRetour(resultat);
+        fonctionRetour(
+          resultat
+        );
 
       }
 
       finally {
 
-        delete window[callbackName];
+        delete window[
+          callbackName
+        ];
+
 
         script.remove();
       }
@@ -869,7 +1680,11 @@ function appelerAPI(
   script.onerror =
     function() {
 
-      delete window[callbackName];
+
+      delete window[
+        callbackName
+      ];
+
 
       script.remove();
 
@@ -890,21 +1705,26 @@ function appelerAPI(
 // ERREURS
 // ======================================================
 
-function afficherErreur(message) {
+function afficherErreur(
+  message
+) {
 
 
-  document.getElementById("app")
+  document
+    .getElementById("app")
     .innerHTML = `
 
       <h1>
         ❌ Erreur
       </h1>
 
-      <p class="error">
+
+      <p class="message">
 
         ${escapeHtml(message)}
 
       </p>
+
     `;
 }
 
@@ -913,7 +1733,9 @@ function afficherErreur(message) {
 // SÉCURITÉ HTML
 // ======================================================
 
-function escapeHtml(texte) {
+function escapeHtml(
+  texte
+) {
 
 
   return String(texte)
